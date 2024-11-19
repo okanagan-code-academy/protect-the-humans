@@ -7,7 +7,12 @@
     "image1": {
         "data": "hwQQABAAAAAAAAAAAMDMzAC7u7u7vBHLsNHd3d3L3csbsczMzMsdy9vBZmbGyx3L28HWZsbL3cvbwWZmxssdy9vBZmbGyx3L28FmZsbL3cvbwWZmxssdy9vBZmbGyx3LG7HMzMzL3cuw0d3d3csdywC7u7u7vBHLAAAAAADAzMwAAAAAAAAAAA==",
         "mimeType": "image/x-mkcd-f4",
-        "displayName": "player"
+        "displayName": "player0"
+    },
+    "image3": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAwMzMzAAAAADMu7vLDAAAwLzMzLzMAADMy8zMzMsMALzMzMzMvAwAvMw8M8y8DAC8zDwyzLwMALzMPDPMvAwAvMzMzMy8DADMy8zMzMsMAMC8zMy8zAAAAMy7u8sMAAAAwMzMzAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "roomba"
     },
     "*": {
         "mimeType": "image/x-mkcd-f4",
