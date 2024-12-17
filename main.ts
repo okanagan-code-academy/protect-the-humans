@@ -2,18 +2,37 @@ namespace SpriteKind {
     export const Roomba = SpriteKind.create()
     export const Target = SpriteKind.create()
 }
-/*
-- Create the player (cyborg) in the top down view
-- Make the player move
-- Create the tilemap
-- Create the tilemap assets
 
-*/
+class Enemy {
+    health: number
+    spriteImage: Image[]
+    attackPower: number
+    kind: number
+
+    constructor(health: number, spriteImage: Image[], attackPower: number, kind: number){
+        this.health = health
+        this.spriteImage = spriteImage
+        this.attackPower = attackPower
+        this.kind = kind
+    }
+
+    addSpriteImage(image: Image){
+        this.spriteImage.push(image)
+    }
+    createSprite(){
+        return sprites.create(this.spriteImage[0], this.kind)
+    }
+
+}
+
+let enemyObjects: Enemy[] = [
+    new Enemy(2, [assets.image`slime`], 5, SpriteKind.Enemy)
+]
 
 let playerSprite: Sprite = null
 let targetSprite: Sprite = null
 let currentControlledEntity: Sprite = null
-
+let isDashing: boolean = false
 
 
 function setTileMap() {
@@ -24,6 +43,7 @@ function onStart() {
     setTileMap()
     generateTileMapPlayer()
     generateTileMapRoomba()
+    generateTileMapSlime()
     createTargettingIndicatorSprite()
 }
 
@@ -38,14 +58,14 @@ function generateTileMapPlayer() {
 function createPlayer() {
     playerSprite = sprites.create(assets.image`player`, SpriteKind.Player)
     controller.moveSprite(playerSprite)
-
     scene.cameraFollowSprite(playerSprite)
+    playerSprite.z = 1000
 }
 function createTargettingIndicatorSprite() {
     targetSprite = sprites.create(assets.image`target`, SpriteKind.Target)
 }
 function generateTileMapRoomba() {
-    let roombaAmount: number = randint(1, 4)
+    let roombaAmount: number = randint(1, 15)
     for (let i = 0; i <= roombaAmount; i++) {
         createRoomba(tiles.getRandomTileByType(assets.tile`floorTile`))
     }
@@ -54,7 +74,21 @@ function createRoomba(tileLocation: tiles.Location) {
     let roombaSprite: Sprite = sprites.create(assets.image`roomba`, SpriteKind.Roomba)
     tiles.placeOnTile(roombaSprite, tileLocation)
     setRandomVelocity(roombaSprite, 15, randint(-1, 1), randint(-1, 1))
+    roombaSprite.z = 15
 }
+
+function generateTileMapSlime(){
+    let enemyAmount: number = randint(1, 10)
+    for(let i = 0; i <= enemyAmount; i++){
+        createRandomEnemy(tiles.getRandomTileByType(assets.tile`floorTile`))
+    }
+}
+function createRandomEnemy(tileLocation: tiles.Location){
+
+    let enemySprite: Sprite = enemyObjects._pickRandom().createSprite()
+    tiles.placeOnTile(enemySprite, tileLocation)
+}
+
 function setRandomVelocity(sprite: Sprite, maxSpeed: number, directionX: number, directionY: number) {
     let speed: number = maxSpeed
 
@@ -72,10 +106,10 @@ function setRandomVelocity(sprite: Sprite, maxSpeed: number, directionX: number,
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     let nearestEntity: Sprite[] = spriteutils.getSpritesWithin(SpriteKind.Roomba, 40, playerSprite)
     if (nearestEntity.length > 0 && !currentControlledEntity) {
-        info.startCountdown(5)
+        info.startCountdown(50)
         scene.cameraFollowSprite(nearestEntity[0])
         controller.moveSprite(playerSprite, 0, 0)
-        controller.moveSprite(nearestEntity[0])
+        controller.moveSprite(nearestEntity[0], 50, 50)
         currentControlledEntity = nearestEntity[0]
     }
 })
@@ -86,17 +120,49 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     let directionX: number = Math.sign(currentControlledEntity.vx)
     let directionY: number = Math.sign(currentControlledEntity.vy)
 
-    currentControlledEntity.sayText(directionX.toString() + directionY.toString(), 500)
+    /*
+    - Figure out direction to dash
+    - Start the dash and not anything else
+        - Once the dash starts we can not cancel it
+    - Continue moving on once dash is done
+
+    */
+    isDashing = true
+    controller.moveSprite(currentControlledEntity, 0, 0)
+
+    timer.after(50, function(){
+        // could cause crash if Countdown timer ends before this
+        if(!currentControlledEntity){
+            return
+        }
+        spriteutils.moveTo(
+            currentControlledEntity, 
+            spriteutils.pos(
+                currentControlledEntity.x + 50*directionX, 
+                currentControlledEntity.y + 50*directionY),
+            250
+            )
+            timer.after(250, function(){
+                if(currentControlledEntity){
+                    controller.moveSprite(currentControlledEntity, 50, 50)
+                }
+                isDashing = false
+            })
+    })
 
 
 })
 info.onCountdownEnd(function () {
+    resetControlAbility()
+})
+function resetControlAbility(){
+    info.stopCountdown()
     controller.moveSprite(playerSprite)
     scene.cameraFollowSprite(playerSprite)
     controller.moveSprite(currentControlledEntity, 0, 0)
     setRandomVelocity(currentControlledEntity, 15, randint(-1, 1), randint(-1, 1))
     currentControlledEntity = null
-})
+}
 
 
 // Game-Updates
@@ -126,4 +192,27 @@ game.onUpdate(function () {
     }
 })
 
+// Events
+sprites.onOverlap(SpriteKind.Roomba, SpriteKind.Enemy, function(sprite: Sprite, otherSprite: Sprite){
+    if(currentControlledEntity == null){
+        sprite.destroy()
+        return
+    }
+
+    if(!isDashing){
+        if (sprite.id == currentControlledEntity.id) {
+            resetControlAbility()
+        }
+        sprite.destroy()
+        return
+    }
+
+    if(sprite.id == currentControlledEntity.id){
+        otherSprite.destroy()
+        return
+    }
+    // sprite.destroy()
+
+    
+}) 
 
