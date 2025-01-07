@@ -8,6 +8,62 @@ namespace userconfig {
     export const ARCADE_SCREEN_HEIGHT = 120
 }
 
+let targetSprite: Sprite = null
+let speed = 0
+let playerSprite: Sprite = null
+
+let isDashing = false
+let currentControlledEntity: Sprite = null
+
+
+
+
+
+
+// set tile map
+function setTileMap() {
+    tiles.setTilemap(tilemap`test`)
+}
+// creating sprites on tilemap
+function generateTileMapPlayer() {
+    createPlayer()
+    tiles.placeOnTile(playerSprite, tiles.getTileLocation(8, 8))
+}
+function generateTileMapSlime () {
+    let enemyAmount = randint(1, 10)
+    for (let j = 0; j <= enemyAmount; j++) {
+        createRandomEnemy(tiles.getRandomTileByType(assets.tile`floorTile`))
+    }
+}
+function generateTileMapExcavator() {
+    for (let i = 0; i < 1; i++) {
+        createExcavator(tiles.getRandomTileByType(assets.tile`floorTile`))
+    }
+}
+
+function createExcavator(tileLocation: tiles.Location) {
+    let excavatorSprite: Sprite = sprites.create(assets.image`excavator`, SpriteKind.Excavator)
+    tiles.placeOnTile(excavatorSprite, tileLocation)
+}
+
+function generateTileMapRoomba() {
+    let roombaAmount = randint(1, 15)
+    for (let i = 0; i <= roombaAmount; i++) {
+        createRoomba(tiles.getRandomTileByType(assets.tile`floorTile`))
+    }
+}
+function createRoomba(tileLocation: tiles.Location) {
+    let roombaSprite: Sprite = sprites.create(assets.image`roomba`, SpriteKind.Roomba)
+    tiles.placeOnTile(roombaSprite, tileLocation)
+    setRandomVelocity(roombaSprite, 15, randint(-1, 1), randint(-1, 1))
+    roombaSprite.z = 15
+}
+function createRandomEnemy(tileLocation: tiles.Location) {
+
+    let enemySprite: Sprite = enemyObjects._pickRandom().createSprite()
+    tiles.placeOnTile(enemySprite, tileLocation)
+}
+
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (!(currentControlledEntity)) {
         return
@@ -39,7 +95,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     let nearestEntity = spriteutils.getSpritesWithin(SpriteKind.Roomba, 40, playerSprite).concat(spriteutils.getSpritesWithin(SpriteKind.Excavator, 40, playerSprite))
     if (nearestEntity.length > 0 && !(currentControlledEntity)) {
-        info.startCountdown(50)
+        info.startCountdown(10)
         scene.cameraFollowSprite(nearestEntity[0])
         controller.moveSprite(playerSprite, 0, 0)
         controller.moveSprite(nearestEntity[0], 50, 50)
@@ -56,32 +112,12 @@ function setRandomVelocity (sprite: Sprite, maxSpeed: number, directionX: number
     }
     sprite.setVelocity(directionX * speed, directionY * speed)
 }
-function generateTileMapSlime () {
-    enemyAmount = randint(1, 10)
-    for (let j = 0; j <= enemyAmount; j++) {
-        createRandomEnemy(tiles.getRandomTileByType(assets.tile`floorTile`))
-    }
-}
+
 info.onCountdownEnd(function () {
     resetControlAbility()
 })
 
-function setTileMap () {
-    tiles.setTilemap(tilemap`test`)
-}
-// creating sprites on tilemap
-function generateTileMapPlayer () {
-    createPlayer()
-    tiles.placeOnTile(playerSprite, tiles.getTileLocation(8, 8))
-}
-function onStart () {
-    setTileMap()
-    generateTileMapPlayer()
-    generateTileMapRoomba()
-    generateTileMapSlime()
-    generateTileMapExcavator()
-    createTargettingIndicatorSprite()
-}
+
 function createTargettingIndicatorSprite () {
     targetSprite = sprites.create(assets.image`target`, SpriteKind.Target)
 }
@@ -96,7 +132,7 @@ function resetControlAbility () {
     controller.moveSprite(playerSprite)
     scene.cameraFollowSprite(playerSprite)
     controller.moveSprite(currentControlledEntity, 0, 0)
-    setRandomVelocity(currentControlledEntity, 15, randint(-1, 1), randint(-1, 1))
+    setRandomVelocity(currentControlledEntity, sprites.readDataNumber(currentControlledEntity, "speed"), randint(-1, 1), randint(-1, 1))
     currentControlledEntity = null
 }
 // Events
@@ -278,15 +314,7 @@ function slimeExplodeAnimation(sprite: Sprite){
     effectsSprite.lifespan = 226
 }
 
-let targetSprite: Sprite = null
-let enemyAmount = 0
-let speed = 0
-let playerSprite: Sprite = null
-
-let roombaAmount = 0
-let isDashing = false
-let currentControlledEntity: Sprite = null
-
+// Classes
 class Enemy {
     health: number
     spriteImage: Image[]
@@ -304,75 +332,132 @@ class Enemy {
         this.spriteImage.push(image)
     }
     createSprite(){
-        return sprites.create(this.spriteImage[0], this.kind)
+        let enemySprite = sprites.create(this.spriteImage[0], this.kind)
+        sprites.setDataNumber(enemySprite, "health", this.health)
+        sprites.setDataNumber(enemySprite, "attackPower", this.attackPower)
+        return enemySprite
+    }
+}
+
+class Entity {
+    speed: number
+    health: number
+    spriteImage: Image
+    attackPower: number
+    tileImage: Image
+    kind: number
+    spriteAnimation: Image[][] = null
+
+    constructor(speed: number, health: number, spriteImage: Image, attackPower: number, tileImage: Image, kind: number){
+        this.speed = speed
+        this.health = health
+        this.spriteImage = spriteImage
+        this.attackPower = attackPower
+        this.tileImage = tileImage
+        this.kind = kind
     }
 
+    createSprite() {
+        let entitySprite = sprites.create(this.spriteImage, this.kind)
+        sprites.setDataNumber(entitySprite, "speed", this.speed)
+        sprites.setDataNumber(entitySprite, "health", this.health)
+        sprites.setDataNumber(entitySprite, "attackPower", this.attackPower)
+        sprites.setDataImage(entitySprite, "tileImage", this.tileImage)
+        setRandomVelocity(entitySprite, this.speed, randint(-1, 1), randint(-1, 1))
+        
+        if(this.spriteAnimation){
+            characterAnimations.loopFrames(
+                entitySprite,
+                this.spriteAnimation[0],
+                1,
+                Predicate.FacingLeft
+            )
+            characterAnimations.loopFrames(
+                entitySprite,
+                this.spriteAnimation[1],
+                1,
+                Predicate.FacingUp
+            )
+            characterAnimations.loopFrames(
+                entitySprite,
+                this.spriteAnimation[2],
+                1,
+                Predicate.FacingRight
+            )
+            characterAnimations.loopFrames(
+                entitySprite,
+                this.spriteAnimation[3],
+                1,
+                Predicate.FacingDown
+            )
+        }
+
+        return entitySprite
+    }
+    // animation order will be direction left, up, right, down
+    addAnimation(animation: Image[][]){
+        this.spriteAnimation = animation
+
+    }
 }
-let enemyObjects = [new Enemy(2, [assets.image`slime`], 5, SpriteKind.Enemy)]
+
+let enemyObjects: Enemy[] = [
+    new Enemy(2, [assets.image`slime`], 5, SpriteKind.Enemy),
+]
+let entityObjects: Entity[] = [
+    new Entity(20, 1, assets.image`roomba`, 1, assets.tile`floorTile`, SpriteKind.Roomba),
+    new Entity(0, 5, assets.image`excavator`, 500, assets.tile`floorTile`, SpriteKind.Excavator)
+]
+
+// Excavator animations
+entityObjects[1].addAnimation([
+    [
+        assets.image`excavatorLeft`
+    ],
+    [
+        assets.image`excavatorUp`
+    ],
+    [
+        assets.image`excavatorRight`
+    ],
+    [
+        assets.image`excavatorDown`
+    ]
+])
+
+
+function onStart() {
+    setTileMap()
+    generateTileMapPlayer()
+    // generateTileMapRoomba()
+    generateTileMapSlime()
+    generateTileMapEntity()
+    // generateTileMapExcavator()
+    createTargettingIndicatorSprite()
+}
+
+function generateTileMapEntity() {
+    let roombaAmount = randint(1, 10)
+    let excavatorAmount = randint(1, 2)
+
+    for (let i = 0; i <= roombaAmount; i++) {
+        let roomba: Sprite = entityObjects[0].createSprite()
+        tiles.placeOnRandomTile(roomba, entityObjects[0].tileImage)
+    }
+    for (let i = 0; i <= excavatorAmount; i++) {
+        let excavator: Sprite = entityObjects[1].createSprite()
+        tiles.placeOnRandomTile(excavator, entityObjects[1].tileImage)
+    }
+}
+
+
+// ============ Start of Program ===========
+
+
 // The entry-point to my game
 onStart()
 
-function generateTileMapExcavator(){
-    for(let i = 0; i < 1; i++){
-        createExcavator(tiles.getRandomTileByType(assets.tile`floorTile`))
-    }
-}
 
-function createExcavator(tileLocation: tiles.Location) {
-    let excavatorSprite: Sprite = sprites.create(img`
-        ................................
-        ................................
-        ................................
-        .......ada............ada.......
-        .......bba..99999999..abb.......
-        .......ada.8999999998.ada.......
-        .......ad98999999999989da.......
-        .......bb99999999999999bb.......
-        .......ad99999899899999da.......
-        .......ad99999988999999da.......
-        .......bb99999899899999bb.......
-        .......ad99999999999999da.......
-        .......ad99999999999999da.......
-        .......bb99999999339999bb.......
-        .......ad999cccc9339999da.......
-        .......ad989cccc9999989da.......
-        .......bb988cccc9999889bb.......
-        .......ada99cccc999999ada.......
-        .......ada..cccc......ada.......
-        .......bbb...cc.......bbb.......
-        .......ada...cc.......ada.......
-        .......ada...cc.......ada.......
-        .............cc.................
-        .............cc.................
-        .............cc.................
-        .............cc.................
-        ..........2.2cc2.2..............
-        ..........222cc222..............
-        ..........222cc222..............
-        ..........22222222..............
-        ................................
-        ................................
-    `, SpriteKind.Excavator)
-    tiles.placeOnTile(excavatorSprite, tileLocation)
-}
-
-function generateTileMapRoomba() {
-    roombaAmount = randint(1, 15)
-    for (let i = 0; i <= roombaAmount; i++) {
-        createRoomba(tiles.getRandomTileByType(assets.tile`floorTile`))
-    }
-}
-function createRoomba(tileLocation: tiles.Location) {
-    let roombaSprite: Sprite = sprites.create(assets.image`roomba`, SpriteKind.Roomba)
-    tiles.placeOnTile(roombaSprite, tileLocation)
-    setRandomVelocity(roombaSprite, 15, randint(-1, 1), randint(-1, 1))
-    roombaSprite.z = 15
-}
-function createRandomEnemy(tileLocation: tiles.Location){
-
-    let enemySprite: Sprite = enemyObjects._pickRandom().createSprite()
-    tiles.placeOnTile(enemySprite, tileLocation)
-}
 // Game-Updates
 game.onUpdate(function () {
     let nearestEntity = spriteutils.getSpritesWithin(SpriteKind.Roomba, 40, playerSprite)

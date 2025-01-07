@@ -5,7 +5,9 @@
         "device": "*",
         "arcade-sprite-util": "github:jwunderl/arcade-sprite-util#v0.4.1",
         "Timers": "github:microsoft/arcade-timers#v1.1.0",
-        "Extra Effects": "github:alexszeto/extra-effects#v3.1.0"
+        "Extra Effects": "github:alexszeto/extra-effects#v3.1.0",
+        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.2.1",
+        "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2"
     },
     "files": [
         "main.blocks",
