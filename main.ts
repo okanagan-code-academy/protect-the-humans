@@ -4,7 +4,7 @@ namespace SpriteKind {
     export const Excavator = SpriteKind.create()
 }
 namespace userconfig {
-    export const ARCADE_SCREEN_WIDTH = 180
+    export const ARCADE_SCREEN_WIDTH = 160
     export const ARCADE_SCREEN_HEIGHT = 120
 }
 
