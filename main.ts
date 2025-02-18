@@ -7,17 +7,46 @@ namespace userconfig {
     export const ARCADE_SCREEN_WIDTH = 160
     export const ARCADE_SCREEN_HEIGHT = 120
 }
+namespace SpriteSheet {
+    export const excavatorAttackAnimation: Image[][] = [
+        [
+            assets.image`shovelLeft0`,
+            assets.image`shovelLeft1`,
+            assets.image`shovelLeft2`,
+            assets.image`shovelLeft3`,
+        ],
+        [
+            assets.image`shovelUp0`,
+            assets.image`shovelUp1`,
+            assets.image`shovelUp2`,
+            assets.image`shovelUp3`,
+
+        ],
+        [
+            assets.image`shovelRight0`,
+            assets.image`shovelRight1`,
+            assets.image`shovelRight2`,
+            assets.image`shovelRight3`,
+        ],
+        [
+            assets.image`shovelDown0`,
+            assets.image`shovelDown1`,
+            assets.image`shovelDown2`,
+            assets.image`shovelDown3`,
+        ]
+
+    ]
+
+}
+
+
+
 
 let targetSprite: Sprite = null
 let speed = 0
 let playerSprite: Sprite = null
-
 let isDashing = false
 let currentControlledEntity: Sprite = null
-
-
-
-
 
 
 // set tile map
@@ -43,6 +72,7 @@ function generateTileMapExcavator() {
 
 function createExcavator(tileLocation: tiles.Location) {
     let excavatorSprite: Sprite = sprites.create(assets.image`excavator`, SpriteKind.Excavator)
+
     tiles.placeOnTile(excavatorSprite, tileLocation)
 }
 
@@ -66,6 +96,58 @@ function createRandomEnemy(tileLocation: tiles.Location) {
 
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (!(currentControlledEntity)) {
+        return
+    }
+    if(currentControlledEntity.kind() == SpriteKind.Excavator){
+        let frameInterval: number = 50
+        let attackSprite: Sprite = sprites.readDataSprite(currentControlledEntity, "attackSprite")
+
+        if(characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingLeft)){
+            animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[0], frameInterval, false)
+        } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingUp)){
+            animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[1], frameInterval, false)
+        } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingRight)) {
+            animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[2], frameInterval, false)
+        } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingDown)) {
+            animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[3], frameInterval, false)
+        }
+
+        timer.after(frameInterval*SpriteSheet.excavatorAttackAnimation[0].length + 1, function(){
+            attackSprite.setImage(img`
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+                ................................
+            `)
+        })
         return
     }
     let directionX: number = Math.sign(currentControlledEntity.vx)
@@ -446,10 +528,35 @@ function generateTileMapEntity() {
     }
     for (let i = 0; i <= excavatorAmount; i++) {
         let excavator: Sprite = entityObjects[1].createSprite()
+        createAttackSprite(excavator)
         tiles.placeOnRandomTile(excavator, entityObjects[1].tileImage)
     }
 }
 
+function createAttackSprite(sprite: Sprite){
+    let attackSprite: Sprite = sprites.create(img`
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+        `, SpriteKind.Excavator)
+    sprites.setDataSprite(sprite, "attackSprite", attackSprite)
+    game.forever(function(){
+        attackSprite.setPosition(sprite.x, sprite.y)
+    })
+}
 
 // ============ Start of Program ===========
 
