@@ -2,6 +2,7 @@ namespace SpriteKind {
     export const Roomba = SpriteKind.create()
     export const Target = SpriteKind.create()
     export const Excavator = SpriteKind.create()
+    export const Shovel = SpriteKind.create()
 }
 namespace userconfig {
     export const ARCADE_SCREEN_WIDTH = 160
@@ -34,9 +35,152 @@ namespace SpriteSheet {
             assets.image`shovelDown2`,
             assets.image`shovelDown3`,
         ]
-
     ]
+    export const roombaExplosionAnimation: Image[] = [
+        img`
+                . . . . . . . . b b . . . . . .
+                . . . . . . . b 9 1 b . . . . .
+                . . b b . . . b 9 9 b . . . . .
+                . b 9 1 b . . b b b . . b b b .
+                . b 3 9 b . b b b b . b 9 9 1 b
+                . b b b b b 9 9 1 1 b b 3 9 9 b
+                . . . . b 9 d 9 1 1 b b b b b .
+                . . . . b 5 3 9 9 9 b . . . . .
+                . . b b b 5 3 3 d 9 b . . . . .
+                . b 5 1 b b 5 5 9 b b b b . . .
+                . b 5 5 b b b b b b 3 9 9 3 . .
+                . b b b b b b b . b 9 1 1 9 b .
+                . . . b 5 5 1 b . b 9 1 1 9 b .
+                . . . b 5 5 5 b . b 3 9 9 3 b .
+                . . . . b b b . . . b b b b . .
+                . . . . . . . . . . . . . . . .
+            `,
+        img`
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . b b . . . . .
+                . . . . . . . . b 9 1 b . . . .
+                . . . b b b b b b 9 9 b . . . .
+                . . b 9 9 d 9 9 1 1 d b b b b .
+                . . . b d 9 9 9 1 1 9 9 d 9 1 b
+                . . b 9 d 9 9 9 9 9 9 9 d 9 9 b
+                . . b 9 3 3 9 9 9 9 9 d b b b .
+                . b 5 d 9 3 3 3 d d b b b b . .
+                b 5 5 5 b b b b b b b 9 9 1 b .
+                b 5 5 b . . . . . . b 3 9 9 b .
+                . b b . . . . . . . . b b b . .
+            `,
+        img`
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . 1 1 1 . . .
+                . . . 1 1 . . . . . 1 1 1 . . .
+                . . . 1 1 . . 1 1 . 1 1 1 . . .
+                . . . . . . . 1 1 . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . 1 . . . .
+                . . . . 1 . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+            `,
+    ]
+    export const slimeExplosionAnimation: Image[] = [
+        img`
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . 3 3 3 3 3 3 . . . . .
+                . . . 3 3 3 5 3 3 5 3 3 3 . . .
+                . . 3 3 3 3 3 3 3 3 3 3 3 3 . .
+                . . . 3 3 3 3 3 3 3 3 3 3 . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+            `,
+        img`
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . 3 . .
+                . . . . . f . . 3 . . . . . . .
+                . . 3 3 . . . . . . 3 . . . . .
+                . . . 3 . . . . . . . . . . f .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                3 3 . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . 3 . . 3 3 . 3 . . . . . . .
+                . 3 3 . . . 3 . . . 3 . . . 3 .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+            `,
+        img`
+                . . . . . . . . . 3 . . . . . .
+                . . . . . f . . . . . 3 . . . .
+                . 3 3 . . . . . . . . . . . . f
+                . . 3 . . . . . . . . . . 3 . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                3 . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . 3 . . . 3 3 . . . . . . . 3 .
+                3 3 . . . . 3 . . 3 . 3 . . . .
+                . . . . . . . . . . . . . . . .
+            `,
+    ]
+}
 
+namespace OverlapEvents {
+    sprites.onOverlap(SpriteKind.Roomba, SpriteKind.Enemy, function (sprite: Sprite, otherSprite: Sprite) {
+        if (currentControlledEntity == null) {
+            roombaExplodeAnimation(sprite)
+            sprite.destroy()
+            return
+        }
+        if (!(isDashing)) {
+            if (sprite.id == currentControlledEntity.id) {
+                resetControlAbility()
+                scene.cameraShake(25, 200)
+            }
+            roombaExplodeAnimation(sprite)
+            sprite.destroy()
+            return
+        }
+        if (sprite.id == currentControlledEntity.id) {
+            slimeExplodeAnimation(otherSprite)
+            otherSprite.destroy()
+            return
+        }
+    })
+    
+    sprites.onOverlap(SpriteKind.Shovel, SpriteKind.Enemy, function(sprite: Sprite, otherSprite: Sprite) {
+        slimeExplodeAnimation(otherSprite)
+        otherSprite.destroy()
+    })
+    sprites.onOverlap(SpriteKind.Excavator, SpriteKind.Enemy, function (sprite: Sprite, otherSprite: Sprite) {
+        slimeExplodeAnimation(otherSprite)
+        otherSprite.destroy()
+    })
 }
 
 
@@ -89,7 +233,6 @@ function createRoomba(tileLocation: tiles.Location) {
     roombaSprite.z = 15
 }
 function createRandomEnemy(tileLocation: tiles.Location) {
-
     let enemySprite: Sprite = enemyObjects._pickRandom().createSprite()
     tiles.placeOnTile(enemySprite, tileLocation)
 }
@@ -218,27 +361,7 @@ function resetControlAbility () {
     currentControlledEntity = null
 }
 // Events
-sprites.onOverlap(SpriteKind.Roomba, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (currentControlledEntity == null) {
-        roombaExplodeAnimation(sprite)
-        sprite.destroy()
-        return
-    }
-    if (!(isDashing)) {
-        if (sprite.id == currentControlledEntity.id) {
-            resetControlAbility()
-            scene.cameraShake(25, 200)
-        }
-        roombaExplodeAnimation(sprite)
-        sprite.destroy()
-        return
-    }
-    if (sprite.id == currentControlledEntity.id) {
-        slimeExplodeAnimation(otherSprite)
-        otherSprite.destroy()
-        return
-    }
-})
+
 function roombaExplodeAnimation(sprite: Sprite){
     let effectsSprite: Sprite = sprites.create(img`
             . . . . . . . . . . . . . . . .
@@ -259,62 +382,7 @@ function roombaExplodeAnimation(sprite: Sprite){
             . . . . . . . . . . . . . . . .
         `, SpriteKind.Food)
     effectsSprite.setPosition(sprite.x, sprite.y)
-    animation.runImageAnimation(effectsSprite, [
-        img`
-                . . . . . . . . b b . . . . . .
-                . . . . . . . b 9 1 b . . . . .
-                . . b b . . . b 9 9 b . . . . .
-                . b 9 1 b . . b b b . . b b b .
-                . b 3 9 b . b b b b . b 9 9 1 b
-                . b b b b b 9 9 1 1 b b 3 9 9 b
-                . . . . b 9 d 9 1 1 b b b b b .
-                . . . . b 5 3 9 9 9 b . . . . .
-                . . b b b 5 3 3 d 9 b . . . . .
-                . b 5 1 b b 5 5 9 b b b b . . .
-                . b 5 5 b b b b b b 3 9 9 3 . .
-                . b b b b b b b . b 9 1 1 9 b .
-                . . . b 5 5 1 b . b 9 1 1 9 b .
-                . . . b 5 5 5 b . b 3 9 9 3 b .
-                . . . . b b b . . . b b b b . .
-                . . . . . . . . . . . . . . . .
-            `,
-        img`
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . b b . . . . .
-                . . . . . . . . b 9 1 b . . . .
-                . . . b b b b b b 9 9 b . . . .
-                . . b 9 9 d 9 9 1 1 d b b b b .
-                . . . b d 9 9 9 1 1 9 9 d 9 1 b
-                . . b 9 d 9 9 9 9 9 9 9 d 9 9 b
-                . . b 9 3 3 9 9 9 9 9 d b b b .
-                . b 5 d 9 3 3 3 d d b b b b . .
-                b 5 5 5 b b b b b b b 9 9 1 b .
-                b 5 5 b . . . . . . b 3 9 9 b .
-                . b b . . . . . . . . b b b . .
-            `,
-        img`
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . 1 1 1 . . .
-                . . . 1 1 . . . . . 1 1 1 . . .
-                . . . 1 1 . . 1 1 . 1 1 1 . . .
-                . . . . . . . 1 1 . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . 1 . . . .
-                . . . . 1 . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-            `,
-    ], 75, false)
+    animation.runImageAnimation(effectsSprite, SpriteSheet.roombaExplosionAnimation, 75, false)
     effectsSprite.lifespan = 226
 }
 function slimeExplodeAnimation(sprite: Sprite){
@@ -337,62 +405,7 @@ function slimeExplodeAnimation(sprite: Sprite){
             . . . . . . . . . . . . . . . .
         `, SpriteKind.Food)
     effectsSprite.setPosition(sprite.x, sprite.y)
-    animation.runImageAnimation(effectsSprite, [
-        img`
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . 3 3 3 3 3 3 . . . . .
-                . . . 3 3 3 5 3 3 5 3 3 3 . . .
-                . . 3 3 3 3 3 3 3 3 3 3 3 3 . .
-                . . . 3 3 3 3 3 3 3 3 3 3 . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-            `,
-        img`
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . 3 . .
-                . . . . . f . . 3 . . . . . . .
-                . . 3 3 . . . . . . 3 . . . . .
-                . . . 3 . . . . . . . . . . f .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                3 3 . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . 3 . . 3 3 . 3 . . . . . . .
-                . 3 3 . . . 3 . . . 3 . . . 3 .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-            `,
-        img`
-                . . . . . . . . . 3 . . . . . .
-                . . . . . f . . . . . 3 . . . .
-                . 3 3 . . . . . . . . . . . . f
-                . . 3 . . . . . . . . . . 3 . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                3 . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . 3 . . . 3 3 . . . . . . . 3 .
-                3 3 . . . . 3 . . 3 . 3 . . . .
-                . . . . . . . . . . . . . . . .
-            `,
-    ], 75, false)
+    animation.runImageAnimation(effectsSprite, SpriteSheet.slimeExplosionAnimation, 75, false)
     effectsSprite.lifespan = 226
 }
 
@@ -551,7 +564,7 @@ function createAttackSprite(sprite: Sprite){
             . . . . . . . . . . . . . . . .
             . . . . . . . . . . . . . . . .
             . . . . . . . . . . . . . . . .
-        `, SpriteKind.Excavator)
+        `, SpriteKind.Shovel)
     sprites.setDataSprite(sprite, "attackSprite", attackSprite)
     game.forever(function(){
         attackSprite.setPosition(sprite.x, sprite.y)
