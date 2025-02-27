@@ -7,7 +7,9 @@
         "Timers": "github:microsoft/arcade-timers#v1.1.0",
         "Extra Effects": "github:alexszeto/extra-effects#v3.1.0",
         "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.2.1",
-        "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2"
+        "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2",
+        "pxt-arcade-image-transform": "github:robo-technical-group/pxt-arcade-image-transform#v1.0.9",
+        "pxt-arcade-rotsprite": "github:chasemor/pxt-arcade-rotsprite#b5b91d0f67e4df90ec703c36875c30afffbe653c"
     },
     "files": [
         "main.blocks",
@@ -17,13 +19,13 @@
         "tilemap.g.jres",
         "tilemap.g.ts",
         "images.g.jres",
-        "images.g.ts"
+        "images.g.ts",
+        "classes.ts",
+        "spritSheet.ts"
     ],
-    "testFiles": [
-        "test.ts"
-    ],
+    "testFiles": [],
     "targetVersions": {
-        "target": "1.12.58",
+        "target": "1.12.59",
         "targetId": "arcade"
     },
     "supportedTargets": [

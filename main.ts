@@ -8,147 +8,6 @@ namespace userconfig {
     export const ARCADE_SCREEN_WIDTH = 160
     export const ARCADE_SCREEN_HEIGHT = 120
 }
-namespace SpriteSheet {
-    export const excavatorAttackAnimation: Image[][] = [
-        [
-            assets.image`shovelLeft0`,
-            assets.image`shovelLeft1`,
-            assets.image`shovelLeft2`,
-            assets.image`shovelLeft3`,
-        ],
-        [
-            assets.image`shovelUp0`,
-            assets.image`shovelUp1`,
-            assets.image`shovelUp2`,
-            assets.image`shovelUp3`,
-
-        ],
-        [
-            assets.image`shovelRight0`,
-            assets.image`shovelRight1`,
-            assets.image`shovelRight2`,
-            assets.image`shovelRight3`,
-        ],
-        [
-            assets.image`shovelDown0`,
-            assets.image`shovelDown1`,
-            assets.image`shovelDown2`,
-            assets.image`shovelDown3`,
-        ]
-    ]
-    export const roombaExplosionAnimation: Image[] = [
-        img`
-                . . . . . . . . b b . . . . . .
-                . . . . . . . b 9 1 b . . . . .
-                . . b b . . . b 9 9 b . . . . .
-                . b 9 1 b . . b b b . . b b b .
-                . b 3 9 b . b b b b . b 9 9 1 b
-                . b b b b b 9 9 1 1 b b 3 9 9 b
-                . . . . b 9 d 9 1 1 b b b b b .
-                . . . . b 5 3 9 9 9 b . . . . .
-                . . b b b 5 3 3 d 9 b . . . . .
-                . b 5 1 b b 5 5 9 b b b b . . .
-                . b 5 5 b b b b b b 3 9 9 3 . .
-                . b b b b b b b . b 9 1 1 9 b .
-                . . . b 5 5 1 b . b 9 1 1 9 b .
-                . . . b 5 5 5 b . b 3 9 9 3 b .
-                . . . . b b b . . . b b b b . .
-                . . . . . . . . . . . . . . . .
-            `,
-        img`
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . b b . . . . .
-                . . . . . . . . b 9 1 b . . . .
-                . . . b b b b b b 9 9 b . . . .
-                . . b 9 9 d 9 9 1 1 d b b b b .
-                . . . b d 9 9 9 1 1 9 9 d 9 1 b
-                . . b 9 d 9 9 9 9 9 9 9 d 9 9 b
-                . . b 9 3 3 9 9 9 9 9 d b b b .
-                . b 5 d 9 3 3 3 d d b b b b . .
-                b 5 5 5 b b b b b b b 9 9 1 b .
-                b 5 5 b . . . . . . b 3 9 9 b .
-                . b b . . . . . . . . b b b . .
-            `,
-        img`
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . 1 1 1 . . .
-                . . . 1 1 . . . . . 1 1 1 . . .
-                . . . 1 1 . . 1 1 . 1 1 1 . . .
-                . . . . . . . 1 1 . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . 1 . . . .
-                . . . . 1 . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-            `,
-    ]
-    export const slimeExplosionAnimation: Image[] = [
-        img`
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . 3 3 3 3 3 3 . . . . .
-                . . . 3 3 3 5 3 3 5 3 3 3 . . .
-                . . 3 3 3 3 3 3 3 3 3 3 3 3 . .
-                . . . 3 3 3 3 3 3 3 3 3 3 . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-            `,
-        img`
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . 3 . .
-                . . . . . f . . 3 . . . . . . .
-                . . 3 3 . . . . . . 3 . . . . .
-                . . . 3 . . . . . . . . . . f .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                3 3 . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . 3 . . 3 3 . 3 . . . . . . .
-                . 3 3 . . . 3 . . . 3 . . . 3 .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-            `,
-        img`
-                . . . . . . . . . 3 . . . . . .
-                . . . . . f . . . . . 3 . . . .
-                . 3 3 . . . . . . . . . . . . f
-                . . 3 . . . . . . . . . . 3 . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                3 . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . . .
-                . 3 . . . 3 3 . . . . . . . 3 .
-                3 3 . . . . 3 . . 3 . 3 . . . .
-                . . . . . . . . . . . . . . . .
-            `,
-    ]
-}
 
 namespace OverlapEvents {
     sprites.onOverlap(SpriteKind.Roomba, SpriteKind.Enemy, function (sprite: Sprite, otherSprite: Sprite) {
@@ -191,6 +50,7 @@ let speed = 0
 let playerSprite: Sprite = null
 let isDashing = false
 let currentControlledEntity: Sprite = null
+let currentAngle: number = 0
 
 
 // set tile map
@@ -237,6 +97,47 @@ function createRandomEnemy(tileLocation: tiles.Location) {
     tiles.placeOnTile(enemySprite, tileLocation)
 }
 
+forever(function(){
+    if(!currentControlledEntity){
+        return
+    }
+    if (currentControlledEntity.kind() != SpriteKind.Excavator) {
+        return    
+    }
+
+    controller.moveSprite(currentControlledEntity, 0, 0)
+    currentControlledEntity.setImage(assets.image`excavator`)
+    if(controller.left.isPressed()){
+        currentAngle -= 5 * control.eventContext().deltaTime
+    } else if(controller.right.isPressed()){
+        currentAngle += 5 * control.eventContext().deltaTime
+    }
+    rotsprite.rotSprite(currentControlledEntity, currentAngle)
+
+    if(controller.up.isPressed()){
+        spriteutils.setVelocityAtAngle(currentControlledEntity, currentAngle - Math.PI/2, -50)
+    } else if(controller.down.isPressed()){
+        spriteutils.setVelocityAtAngle(currentControlledEntity, currentAngle - Math.PI/2, 50)
+    } else {
+        currentControlledEntity.setVelocity(0,0)
+    }
+})
+
+
+controller.left.onEvent(ControllerButtonEvent.Repeated, function(){
+    if(!currentControlledEntity){
+        return
+    }
+    if(currentControlledEntity.kind() == SpriteKind.Excavator){
+        transformSprites.changeRotation(currentControlledEntity, 5)
+    }
+})
+controller.right.onEvent(ControllerButtonEvent.Pressed, function(){
+    if (!currentControlledEntity) {
+        return
+    }
+})
+
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (!(currentControlledEntity)) {
         return
@@ -245,15 +146,17 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         let frameInterval: number = 50
         let attackSprite: Sprite = sprites.readDataSprite(currentControlledEntity, "attackSprite")
 
-        if(characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingLeft)){
-            animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[0], frameInterval, false)
-        } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingUp)){
-            animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[1], frameInterval, false)
-        } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingRight)) {
-            animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[2], frameInterval, false)
-        } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingDown)) {
-            animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[3], frameInterval, false)
-        }
+        // if(characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingLeft)){
+        //     animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[0], frameInterval, false)
+        // } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingUp)){
+        //     animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[1], frameInterval, false)
+        // } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingRight)) {
+        //     animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[2], frameInterval, false)
+        // } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingDown)) {
+        //     animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[3], frameInterval, false)
+        // }
+
+        runAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[2])
 
         timer.after(frameInterval*SpriteSheet.excavatorAttackAnimation[0].length + 1, function(){
             attackSprite.setImage(img`
@@ -315,6 +218,17 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         })
     })
 })
+
+function runAnimation(sprite: Sprite, animation: Image[]) : void{
+    let frameInterval = 50
+
+    for(let image of animation){
+        sprite.setImage(image)
+        rotsprite.rotSprite(sprite, currentAngle + Math.PI/2)
+        pause(frameInterval)
+    }
+}
+
 
 // Keyboard Input
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -410,91 +324,7 @@ function slimeExplodeAnimation(sprite: Sprite){
 }
 
 // Classes
-class Enemy {
-    health: number
-    spriteImage: Image[]
-    attackPower: number
-    kind: number
 
-    constructor(health: number, spriteImage: Image[], attackPower: number, kind: number){
-        this.health = health
-        this.spriteImage = spriteImage
-        this.attackPower = attackPower
-        this.kind = kind
-    }
-
-    addSpriteImage(image: Image){
-        this.spriteImage.push(image)
-    }
-    createSprite(){
-        let enemySprite = sprites.create(this.spriteImage[0], this.kind)
-        sprites.setDataNumber(enemySprite, "health", this.health)
-        sprites.setDataNumber(enemySprite, "attackPower", this.attackPower)
-        return enemySprite
-    }
-}
-
-class Entity {
-    speed: number
-    health: number
-    spriteImage: Image
-    attackPower: number
-    tileImage: Image
-    kind: number
-    spriteAnimation: Image[][] = null
-
-    constructor(speed: number, health: number, spriteImage: Image, attackPower: number, tileImage: Image, kind: number){
-        this.speed = speed
-        this.health = health
-        this.spriteImage = spriteImage
-        this.attackPower = attackPower
-        this.tileImage = tileImage
-        this.kind = kind
-    }
-
-    createSprite() {
-        let entitySprite = sprites.create(this.spriteImage, this.kind)
-        sprites.setDataNumber(entitySprite, "speed", this.speed)
-        sprites.setDataNumber(entitySprite, "health", this.health)
-        sprites.setDataNumber(entitySprite, "attackPower", this.attackPower)
-        sprites.setDataImage(entitySprite, "tileImage", this.tileImage)
-        setRandomVelocity(entitySprite, this.speed, randint(-1, 1), randint(-1, 1))
-        
-        if(this.spriteAnimation){
-            characterAnimations.loopFrames(
-                entitySprite,
-                this.spriteAnimation[0],
-                1,
-                Predicate.FacingLeft
-            )
-            characterAnimations.loopFrames(
-                entitySprite,
-                this.spriteAnimation[1],
-                1,
-                Predicate.FacingUp
-            )
-            characterAnimations.loopFrames(
-                entitySprite,
-                this.spriteAnimation[2],
-                1,
-                Predicate.FacingRight
-            )
-            characterAnimations.loopFrames(
-                entitySprite,
-                this.spriteAnimation[3],
-                1,
-                Predicate.FacingDown
-            )
-        }
-
-        return entitySprite
-    }
-    // animation order will be direction left, up, right, down
-    addAnimation(animation: Image[][]){
-        this.spriteAnimation = animation
-
-    }
-}
 
 let enemyObjects: Enemy[] = [
     new Enemy(2, [assets.image`slime`], 5, SpriteKind.Enemy),
