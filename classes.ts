@@ -3,6 +3,7 @@ class Enemy {
     spriteImage: Image[]
     attackPower: number
     kind: number
+    spriteType: string = ""
 
     constructor(health: number, spriteImage: Image[], attackPower: number, kind: number) {
         this.health = health
@@ -18,7 +19,11 @@ class Enemy {
         let enemySprite = sprites.create(this.spriteImage[0], this.kind)
         sprites.setDataNumber(enemySprite, "health", this.health)
         sprites.setDataNumber(enemySprite, "attackPower", this.attackPower)
+        sprites.setDataString(enemySprite, "type", this.spriteType)
         return enemySprite
+    }
+    setSpriteType(newType: string) {
+        this.spriteType = newType
     }
 }
 
@@ -81,5 +86,25 @@ class Entity {
     addAnimation(animation: Image[][]) {
         this.spriteAnimation = animation
 
+    }
+}
+class Human{
+    speed: number
+    health: number
+    kind: number
+    spriteImage: Image
+    animation: Image[][] //subject to change
+
+    constructor(speed: number, health: number, kind: number, spriteImage: Image){
+        this.speed = speed
+        this.health = health
+        this.kind = kind
+        this.spriteImage = spriteImage
+    }
+    createSprite(){
+        let humanSprite: Sprite = sprites.create(this.spriteImage, this.kind)
+        sprites.setDataNumber(humanSprite, "health", this.health)
+        sprites.setDataNumber(humanSprite, "speed", this.speed)
+        return humanSprite
     }
 }

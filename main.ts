@@ -3,6 +3,7 @@ namespace SpriteKind {
     export const Target = SpriteKind.create()
     export const Excavator = SpriteKind.create()
     export const Shovel = SpriteKind.create()
+    export const Human = SpriteKind.create()
 }
 namespace userconfig {
     export const ARCADE_SCREEN_WIDTH = 160
@@ -26,6 +27,13 @@ namespace OverlapEvents {
             return
         }
         if (sprite.id == currentControlledEntity.id) {
+            if(sprites.readDataString(otherSprite, "type") == "zombie"){
+                resetControlAbility()
+                scene.cameraShake(25, 200)
+                roombaExplodeAnimation(sprite)
+                sprite.destroy()
+                return
+            }
             slimeExplodeAnimation(otherSprite)
             otherSprite.destroy()
             return
@@ -33,15 +41,26 @@ namespace OverlapEvents {
     })
     
     sprites.onOverlap(SpriteKind.Shovel, SpriteKind.Enemy, function(sprite: Sprite, otherSprite: Sprite) {
-        slimeExplodeAnimation(otherSprite)
         otherSprite.destroy()
+        if(sprites.readDataString(otherSprite, "type") == "zombie"){
+            zombieExplodeAnimation(otherSprite)
+        } else {
+            slimeExplodeAnimation(otherSprite)
+        }
+        
     })
     sprites.onOverlap(SpriteKind.Excavator, SpriteKind.Enemy, function (sprite: Sprite, otherSprite: Sprite) {
-        slimeExplodeAnimation(otherSprite)
+        if(!currentControlledEntity){
+            return
+        }
+        if (sprites.readDataString(otherSprite, "type") == "zombie"){
+            zombieExplodeAnimation(otherSprite)
+        } else {
+            slimeExplodeAnimation(otherSprite)
+        }
         otherSprite.destroy()
     })
 }
-
 
 
 
@@ -62,30 +81,16 @@ function generateTileMapPlayer() {
     createPlayer()
     tiles.placeOnTile(playerSprite, tiles.getTileLocation(8, 8))
 }
-function generateTileMapSlime () {
+function generateTileMapEnemy () {
     let enemyAmount = randint(1, 10)
     for (let j = 0; j <= enemyAmount; j++) {
         createRandomEnemy(tiles.getRandomTileByType(assets.tile`floorTile`))
     }
 }
-function generateTileMapExcavator() {
-    for (let i = 0; i < 1; i++) {
-        createExcavator(tiles.getRandomTileByType(assets.tile`floorTile`))
-    }
-}
 
-function createExcavator(tileLocation: tiles.Location) {
-    let excavatorSprite: Sprite = sprites.create(assets.image`excavator`, SpriteKind.Excavator)
 
-    tiles.placeOnTile(excavatorSprite, tileLocation)
-}
 
-function generateTileMapRoomba() {
-    let roombaAmount = randint(1, 15)
-    for (let i = 0; i <= roombaAmount; i++) {
-        createRoomba(tiles.getRandomTileByType(assets.tile`floorTile`))
-    }
-}
+
 function createRoomba(tileLocation: tiles.Location) {
     let roombaSprite: Sprite = sprites.create(assets.image`roomba`, SpriteKind.Roomba)
     tiles.placeOnTile(roombaSprite, tileLocation)
@@ -124,20 +129,6 @@ forever(function(){
 })
 
 
-controller.left.onEvent(ControllerButtonEvent.Repeated, function(){
-    if(!currentControlledEntity){
-        return
-    }
-    if(currentControlledEntity.kind() == SpriteKind.Excavator){
-        transformSprites.changeRotation(currentControlledEntity, 5)
-    }
-})
-controller.right.onEvent(ControllerButtonEvent.Pressed, function(){
-    if (!currentControlledEntity) {
-        return
-    }
-})
-
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (!(currentControlledEntity)) {
         return
@@ -145,17 +136,6 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if(currentControlledEntity.kind() == SpriteKind.Excavator){
         let frameInterval: number = 50
         let attackSprite: Sprite = sprites.readDataSprite(currentControlledEntity, "attackSprite")
-
-        // if(characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingLeft)){
-        //     animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[0], frameInterval, false)
-        // } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingUp)){
-        //     animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[1], frameInterval, false)
-        // } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingRight)) {
-        //     animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[2], frameInterval, false)
-        // } else if (characterAnimations.matchesRule(currentControlledEntity, Predicate.FacingDown)) {
-        //     animation.runImageAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[3], frameInterval, false)
-        // }
-
         runAnimation(attackSprite, SpriteSheet.excavatorAttackAnimation[2])
 
         timer.after(frameInterval*SpriteSheet.excavatorAttackAnimation[0].length + 1, function(){
@@ -229,9 +209,13 @@ function runAnimation(sprite: Sprite, animation: Image[]) : void{
     }
 }
 
-
 // Keyboard Input
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if(currentControlledEntity){
+        resetControlAbility()
+        info.stopCountdown()
+        return
+    }
     let nearestEntity = spriteutils.getSpritesWithin(SpriteKind.Roomba, 40, playerSprite).concat(spriteutils.getSpritesWithin(SpriteKind.Excavator, 40, playerSprite))
     if (nearestEntity.length > 0 && !(currentControlledEntity)) {
         info.startCountdown(10)
@@ -322,45 +306,64 @@ function slimeExplodeAnimation(sprite: Sprite){
     animation.runImageAnimation(effectsSprite, SpriteSheet.slimeExplosionAnimation, 75, false)
     effectsSprite.lifespan = 226
 }
-
+function zombieExplodeAnimation(sprite: Sprite){
+    let effectsSprite: Sprite = sprites.create(img`
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+        `, SpriteKind.Food)
+    effectsSprite.setPosition(sprite.x, sprite.y)
+    animation.runImageAnimation(effectsSprite, SpriteSheet.zombieExplodeAnimation, 75, false)
+    effectsSprite.lifespan = 226
+}
 // Classes
 
 
 let enemyObjects: Enemy[] = [
     new Enemy(2, [assets.image`slime`], 5, SpriteKind.Enemy),
+    new Enemy(50, [SpriteSheet.zombie], 10, SpriteKind.Enemy),
 ]
+
+enemyObjects[0].setSpriteType("slime")
+enemyObjects[1].setSpriteType("zombie")
+
 let entityObjects: Entity[] = [
     new Entity(20, 1, assets.image`roomba`, 1, assets.tile`floorTile`, SpriteKind.Roomba),
     new Entity(0, 5, assets.image`excavator`, 500, assets.tile`floorTile`, SpriteKind.Excavator)
 ]
-
-// Excavator animations
-entityObjects[1].addAnimation([
-    [
-        assets.image`excavatorLeft`
-    ],
-    [
-        assets.image`excavatorUp`
-    ],
-    [
-        assets.image`excavatorRight`
-    ],
-    [
-        assets.image`excavatorDown`
-    ]
-])
-
+let humanObject: Human[] = [
+    new Human(30, 20, SpriteKind.Human, SpriteSheet.human)
+]
 
 function onStart() {
     setTileMap()
     generateTileMapPlayer()
-    // generateTileMapRoomba()
-    generateTileMapSlime()
+    generateTileMapEnemy()
     generateTileMapEntity()
-    // generateTileMapExcavator()
+    generateTileMapHuman()
     createTargettingIndicatorSprite()
 }
+function generateTileMapHuman(){
+    let humanAmount = randint(1, 5)
 
+    for(let i = 0; i <= humanAmount; i++){
+        let humanSprite: Sprite = humanObject[0].createSprite()
+        tiles.placeOnRandomTile(humanSprite, entityObjects[0].tileImage)
+    }
+}
 function generateTileMapEntity() {
     let roombaAmount = randint(1, 10)
     let excavatorAmount = randint(1, 2)
@@ -378,31 +381,31 @@ function generateTileMapEntity() {
 
 function createAttackSprite(sprite: Sprite){
     let attackSprite: Sprite = sprites.create(img`
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-        `, SpriteKind.Shovel)
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+    `, SpriteKind.Shovel)
     sprites.setDataSprite(sprite, "attackSprite", attackSprite)
+    
     game.forever(function(){
         attackSprite.setPosition(sprite.x, sprite.y)
     })
 }
 
 // ============ Start of Program ===========
-
 
 // The entry-point to my game
 onStart()
@@ -430,6 +433,15 @@ game.onUpdate(function () {
         }
         if (roomba.isHittingTile(CollisionDirection.Bottom)) {
             setRandomVelocity(roomba, 15, randint(-1, 1), -1)
+        }
+    }
+})
+
+game.forever(function(){
+    for(let enemy of sprites.allOfKind(SpriteKind.Enemy)){
+        if(sprites.readDataString(enemy, "type") == "slime"){
+            let randomDirection: spriteutils.Position = spriteutils.pos(Math.randomRange(-50, 50), Math.randomRange(-50, 50))
+            spriteutils.moveTo(enemy, spriteutils.pos(enemy.x + randomDirection.x, enemy.y + randomDirection.y), 1500, true)
         }
     }
 })

@@ -12,7 +12,6 @@
         "pxt-arcade-rotsprite": "github:chasemor/pxt-arcade-rotsprite#b5b91d0f67e4df90ec703c36875c30afffbe653c"
     },
     "files": [
-        "main.blocks",
         "main.ts",
         "README.md",
         "assets.json",
@@ -25,7 +24,7 @@
     ],
     "testFiles": [],
     "targetVersions": {
-        "target": "1.12.59",
+        "target": "2.0.48",
         "targetId": "arcade"
     },
     "supportedTargets": [
@@ -34,20 +33,20 @@
     "preferredEditor": "tsprj",
     "palette": [
         "#000000",
-        "#C361DB",
-        "#7E2F4F",
-        "#B4DB61",
-        "#7B8737",
-        "#1D2830",
-        "#283542",
-        "#255729",
-        "#535F66",
-        "#65738c",
-        "#343540",
-        "#A6B2C7",
-        "#203348",
-        "#3A4D52",
-        "#D3795B",
-        "#1D1E2B"
+        "#FFFFFF",
+        "#FF0000",
+        "#FF007D",
+        "#FF7a00",
+        "#e5FF00",
+        "#2D9F00",
+        "#00FF72",
+        "#0034FF",
+        "#17ABFF",
+        "#C600FF",
+        "#636363",
+        "#7400DB",
+        "#00EFFF",
+        "#DF2929",
+        "#000000"
     ]
 }
