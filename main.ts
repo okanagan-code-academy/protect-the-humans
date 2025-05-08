@@ -73,6 +73,10 @@ namespace OverlapEvents {
         sprite.sayText(humanHealth)
         pause(1000)
     })
+    sprites.onOverlap(SpriteKind.Human, SpriteKind.Player, function(sprite: Sprite, otherSprite: Sprite){
+        sprite.destroy()
+        humansRescued += 1
+    })
 }
 
 
@@ -80,6 +84,7 @@ namespace OverlapEvents {
 let targetSprite: Sprite = null
 let speed = 0
 let playerSprite: Sprite = null
+let humansRescued: number = null
 let isDashing = false
 let currentControlledEntity: Sprite = null
 let currentAngle: number = 0
@@ -256,7 +261,7 @@ function createTargettingIndicatorSprite () {
     targetSprite = sprites.create(assets.image`target`, SpriteKind.Target)
 }
 function createPlayer () {
-    playerSprite = sprites.create(assets.image`player`, SpriteKind.Player)
+    playerSprite = sprites.create(SpriteSheet.cyborg, SpriteKind.Player)
     controller.moveSprite(playerSprite)
     scene.cameraFollowSprite(playerSprite)
     playerSprite.z = 1000

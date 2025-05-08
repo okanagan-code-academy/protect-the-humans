@@ -109,10 +109,15 @@ class Human{
         let destinationSprite: Sprite = sprites.create(img`
             f
         `, SpriteKind.Food)
+        sprites.setDataSprite(humanSprite, "destinationSprite", destinationSprite)
         tiles.placeOnRandomTile(destinationSprite, assets.image`floorTile`)
         spriteutils.onSpriteUpdate(humanSprite, function(sprite: Sprite){
-            if(sprites.readDataBoolean(humanSprite, "beingChased")){
+            if( spriteutils.distanceBetween(destinationSprite, humanSprite) <= 12 && sprites.readDataBoolean(humanSprite, "beingChased")){
                 sprite.follow(destinationSprite)
+            } else {
+                // tiles.placeOnRandomTile(destinationSprite, assets.image`floorTile`)
+                tiles.placeOnTile(destinationSprite, tiles.getTilesByType(assets.tile`floorTile`)._pickRandom())
+                sprite.follow(null)
             }
         })
         return humanSprite
