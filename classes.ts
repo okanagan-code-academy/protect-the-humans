@@ -4,6 +4,7 @@ class Enemy {
     attackPower: number
     kind: number
     spriteType: string = ""
+    target: Sprite = null
 
     constructor(health: number, spriteImage: Image[], attackPower: number, kind: number) {
         this.health = health
@@ -20,6 +21,7 @@ class Enemy {
         sprites.setDataNumber(enemySprite, "health", this.health)
         sprites.setDataNumber(enemySprite, "attackPower", this.attackPower)
         sprites.setDataString(enemySprite, "type", this.spriteType)
+        sprites.setDataSprite(enemySprite, "target", this.target)
         return enemySprite
     }
     setSpriteType(newType: string) {
@@ -112,8 +114,8 @@ class Human{
         sprites.setDataSprite(humanSprite, "destinationSprite", destinationSprite)
         tiles.placeOnRandomTile(destinationSprite, assets.image`floorTile`)
         spriteutils.onSpriteUpdate(humanSprite, function(sprite: Sprite){
-            if( spriteutils.distanceBetween(destinationSprite, humanSprite) <= 12 && sprites.readDataBoolean(humanSprite, "beingChased")){
-                sprite.follow(destinationSprite)
+            if( spriteutils.distanceBetween(destinationSprite, humanSprite) >= 12 && sprites.readDataBoolean(humanSprite, "beingChased")){
+                sprite.follow(destinationSprite, 200)
             } else {
                 // tiles.placeOnRandomTile(destinationSprite, assets.image`floorTile`)
                 tiles.placeOnTile(destinationSprite, tiles.getTilesByType(assets.tile`floorTile`)._pickRandom())

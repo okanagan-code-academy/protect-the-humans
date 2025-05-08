@@ -71,6 +71,12 @@ namespace OverlapEvents {
         }
         sprites.setDataNumber(sprite, "health", humanHealth)
         sprite.sayText(humanHealth)
+        
+        if(sprites.readDataString(otherSprite, "type") == "zombie") {
+            sprites.setDataBoolean(sprite, "beingChased", true)
+            sprites.setDataSprite(otherSprite, "target", sprite)
+        }
+
         pause(1000)
     })
     sprites.onOverlap(SpriteKind.Human, SpriteKind.Player, function(sprite: Sprite, otherSprite: Sprite){
@@ -479,7 +485,14 @@ spriteutils.onSpriteKindUpdateInterval(SpriteKind.Enemy, 3000, function (sprite:
         if(nearbyHumans.length > 0){
             sprite.follow(nearbyHumans[0], 75)
             sprites.setDataBoolean(nearbyHumans[0], "beingChased", true)
+            sprites.setDataSprite(sprite, "target", nearbyHumans[0])
             return
+        }
+        let humanSprite: Sprite = sprites.readDataSprite(sprite, "target")
+        if(humanSprite != null){
+            sprites.setDataBoolean(humanSprite, "beingChased", false)
+            humanSprite.sayText("false")
+            sprites.setDataSprite(sprite, "target", null)
         }
         let randomDirection: spriteutils.Position = spriteutils.pos(Math.randomRange(-50, 50), Math.randomRange(-50, 50))
         spriteutils.moveTo(sprite, spriteutils.pos(sprite.x + randomDirection.x, sprite.y + randomDirection.y), Math.randomRange(1000, 2000), false)
