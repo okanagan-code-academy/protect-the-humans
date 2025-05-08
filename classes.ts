@@ -105,6 +105,16 @@ class Human{
         let humanSprite: Sprite = sprites.create(this.spriteImage, this.kind)
         sprites.setDataNumber(humanSprite, "health", this.health)
         sprites.setDataNumber(humanSprite, "speed", this.speed)
+        sprites.setDataBoolean(humanSprite, "beingChased", false)
+        let destinationSprite: Sprite = sprites.create(img`
+            f
+        `, SpriteKind.Food)
+        tiles.placeOnRandomTile(destinationSprite, assets.image`floorTile`)
+        spriteutils.onSpriteUpdate(humanSprite, function(sprite: Sprite){
+            if(sprites.readDataBoolean(humanSprite, "beingChased")){
+                sprite.follow(destinationSprite)
+            }
+        })
         return humanSprite
     }
 }

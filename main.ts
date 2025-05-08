@@ -60,6 +60,19 @@ namespace OverlapEvents {
         }
         otherSprite.destroy()
     })
+    sprites.onOverlap(SpriteKind.Human, SpriteKind.Enemy, function(sprite: Sprite, otherSprite: Sprite){
+        let humanHealth: number = sprites.readDataNumber(sprite, "health")
+        let enemyDamage: number = sprites.readDataNumber(otherSprite, "attackPower")
+
+        humanHealth = humanHealth - enemyDamage
+        if(humanHealth <= 0){
+            sprite.destroy()
+            return
+        }
+        sprites.setDataNumber(sprite, "health", humanHealth)
+        sprite.sayText(humanHealth)
+        pause(1000)
+    })
 }
 
 
@@ -87,8 +100,6 @@ function generateTileMapEnemy () {
         createRandomEnemy(tiles.getRandomTileByType(assets.tile`floorTile`))
     }
 }
-
-
 
 
 function createRoomba(tileLocation: tiles.Location) {
@@ -280,7 +291,12 @@ function roombaExplodeAnimation(sprite: Sprite){
             . . . . . . . . . . . . . . . .
         `, SpriteKind.Food)
     effectsSprite.setPosition(sprite.x, sprite.y)
-    animation.runImageAnimation(effectsSprite, SpriteSheet.roombaExplosionAnimation, 75, false)
+    animation.runImageAnimation(
+        effectsSprite, 
+        SpriteSheet.roombaExplosionAnimation, 
+        75, 
+        false
+        )
     effectsSprite.lifespan = 226
 }
 function slimeExplodeAnimation(sprite: Sprite){
@@ -345,7 +361,7 @@ let entityObjects: Entity[] = [
     new Entity(0, 5, assets.image`excavator`, 500, assets.tile`floorTile`, SpriteKind.Excavator)
 ]
 let humanObject: Human[] = [
-    new Human(30, 20, SpriteKind.Human, SpriteSheet.human)
+    new Human(10, 100, SpriteKind.Human, SpriteSheet.human)
 ]
 
 function onStart() {
@@ -398,8 +414,7 @@ function createAttackSprite(sprite: Sprite){
         . . . . . . . . . . . . . . . .
         . . . . . . . . . . . . . . . .
     `, SpriteKind.Shovel)
-    sprites.setDataSprite(sprite, "attackSprite", attackSprite)
-    
+    sprites.setDataSprite(sprite, "attackSprite", attackSprite)  
     game.forever(function(){
         attackSprite.setPosition(sprite.x, sprite.y)
     })
@@ -437,11 +452,31 @@ game.onUpdate(function () {
     }
 })
 
-game.forever(function(){
-    for(let enemy of sprites.allOfKind(SpriteKind.Enemy)){
-        if(sprites.readDataString(enemy, "type") == "slime"){
-            let randomDirection: spriteutils.Position = spriteutils.pos(Math.randomRange(-50, 50), Math.randomRange(-50, 50))
-            spriteutils.moveTo(enemy, spriteutils.pos(enemy.x + randomDirection.x, enemy.y + randomDirection.y), 1500, true)
+// game.forever(function(){
+//     for(let enemy of sprites.allOfKind(SpriteKind.Enemy)){
+//         if (sprites.readDataString(enemy, "type") == "slime" || sprites.readDataString(enemy, "type") == "zombie"){
+//             let randomDirection: spriteutils.Position = spriteutils.pos(Math.randomRange(-50, 50), Math.randomRange(-50, 50))
+//             spriteutils.moveTo(enemy, spriteutils.pos(enemy.x + randomDirection.x, enemy.y + randomDirection.y), Math.randomRange(1000, 2000), true)
+//         }
+//     }
+// })
+// Slime Enemy Update Event
+spriteutils.onSpriteKindUpdateInterval(SpriteKind.Enemy, 3000, function(sprite: Sprite){
+    if (sprites.readDataString(sprite, "type") == "slime") {
+        let randomDirection: spriteutils.Position = spriteutils.pos(Math.randomRange(-50, 50), Math.randomRange(-50, 50))
+        spriteutils.moveTo(sprite, spriteutils.pos(sprite.x + randomDirection.x, sprite.y + randomDirection.y), Math.randomRange(1000, 2000), false)
+    }
+})
+// Zombie Enemy Update Event
+spriteutils.onSpriteKindUpdateInterval(SpriteKind.Enemy, 3000, function (sprite: Sprite) {
+    if (sprites.readDataString(sprite, "type") == "zombie") {
+        let nearbyHumans: Sprite[] = spriteutils.getSpritesWithin(SpriteKind.Human, 50, sprite)
+        if(nearbyHumans.length > 0){
+            sprite.follow(nearbyHumans[0], 75)
+            sprites.setDataBoolean(nearbyHumans[0], "beingChased", true)
+            return
         }
+        let randomDirection: spriteutils.Position = spriteutils.pos(Math.randomRange(-50, 50), Math.randomRange(-50, 50))
+        spriteutils.moveTo(sprite, spriteutils.pos(sprite.x + randomDirection.x, sprite.y + randomDirection.y), Math.randomRange(1000, 2000), false)
     }
 })
