@@ -179,6 +179,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "largeEnemy"
     },
+    "image37": {
+        "data": "hwQkABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD//wAAAAAAv7vxDwDMDAC/G8zMzMzBAL8RHDwzE8EAvxHMMzMzEQy/ERwzM8ERDL8bwcPMHBEMv/sfEREREQ/w+7+7G8H8D/C7u7u7u7sPwLvLu7u72/u8v7vMu7u7/by/y7u7y7/7v/u7zLvM/fu//8y7y8zd//8Az8zMzN0MAADPzMzM3QwAAPDMzLzNAAAAAM/MvAwAAAAA8MzPAAAAAADAvfsPAAAAANy9zPsAAAAA3MvMuw8AAAC8zP+8+wAAALwMAP/7AAAAzAAAAP8=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "scooper"
+    },
     "*": {
         "mimeType": "image/x-mkcd-f4",
         "dataEncoding": "base64",

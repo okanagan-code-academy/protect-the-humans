@@ -4,6 +4,7 @@ namespace SpriteKind {
     export const Excavator = SpriteKind.create()
     export const Shovel = SpriteKind.create()
     export const Human = SpriteKind.create()
+    export const Scooper = SpriteKind.create()
 }
 namespace userconfig {
     export const ARCADE_SCREEN_WIDTH = 160
@@ -88,17 +89,27 @@ namespace OverlapEvents {
 
 
 let targetSprite: Sprite = null
-let speed = 0
 let playerSprite: Sprite = null
 let humansRescued: number = null
 let isDashing = false
 let currentControlledEntity: Sprite = null
 let currentAngle: number = 0
+let allTileMaps: tiles.TileMapData[] = [
+    tilemap`test`,
+    tilemap`level1`,
+    tilemap`level2`,
+    ]
 
 
 // set tile map
 function setTileMap() {
-    tiles.setTilemap(tilemap`test`)
+    scene.setBackgroundColor(15)
+    tiles.setTilemap(allTileMaps[1])
+    for(let location of tiles.getTilesByType(assets.tile`scooperSpawn`)){
+        let scooperSprite: Sprite = sprites.create(SpriteSheet.scooperSprite, SpriteKind.Scooper)
+        tiles.placeOnTile(scooperSprite, location)
+        tiles.setTileAt(location, assets.tile`floorTile`)
+    }
 }
 // creating sprites on tilemap
 function generateTileMapPlayer() {
@@ -248,7 +259,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 function setRandomVelocity (sprite: Sprite, maxSpeed: number, directionX: number, directionY: number) {
-    speed = maxSpeed
+    let speed: number = maxSpeed
     if (Math.random() <= 0.5) {
         directionX = -1
     }
@@ -362,6 +373,7 @@ function zombieExplodeAnimation(sprite: Sprite){
 let enemyObjects: Enemy[] = [
     new Enemy(2, [assets.image`slime`], 5, SpriteKind.Enemy),
     new Enemy(50, [SpriteSheet.zombie], 10, SpriteKind.Enemy),
+    new Enemy(500, [SpriteSheet.largeEnemy], 5000, SpriteKind.Enemy)
 ]
 
 enemyObjects[0].setSpriteType("slime")

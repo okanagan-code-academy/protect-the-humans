@@ -9,7 +9,8 @@
         "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.2.1",
         "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2",
         "pxt-arcade-image-transform": "github:robo-technical-group/pxt-arcade-image-transform#v1.0.9",
-        "pxt-arcade-rotsprite": "github:chasemor/pxt-arcade-rotsprite#b5b91d0f67e4df90ec703c36875c30afffbe653c"
+        "pxt-arcade-rotsprite": "github:chasemor/pxt-arcade-rotsprite#b5b91d0f67e4df90ec703c36875c30afffbe653c",
+        "tilemaps": "github:microsoft/pxt-tilemaps#v1.12.0"
     },
     "files": [
         "main.ts",
@@ -33,20 +34,20 @@
     "preferredEditor": "tsprj",
     "palette": [
         "#000000",
-        "#FFFFFF",
-        "#FF0000",
-        "#FF007D",
-        "#FF7a00",
-        "#e5FF00",
-        "#2D9F00",
-        "#00FF72",
-        "#0034FF",
-        "#17ABFF",
-        "#C600FF",
-        "#636363",
-        "#7400DB",
-        "#00EFFF",
-        "#DF2929",
-        "#000000"
+        "#FFF1E8",
+        "#FF004D",
+        "#FF77A8",
+        "#FFA300",
+        "#FFEC27",
+        "#008751",
+        "#00E436",
+        "#29ADFF",
+        "#C2C3C7",
+        "#7E2553",
+        "#83769C",
+        "#5F574F",
+        "#FFCCAA",
+        "#AB5236",
+        "#1D2B53"
     ]
 }
