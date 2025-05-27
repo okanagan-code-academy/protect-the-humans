@@ -10,7 +10,8 @@
         "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2",
         "pxt-arcade-image-transform": "github:robo-technical-group/pxt-arcade-image-transform#v1.0.9",
         "pxt-arcade-rotsprite": "github:chasemor/pxt-arcade-rotsprite#b5b91d0f67e4df90ec703c36875c30afffbe653c",
-        "tilemaps": "github:microsoft/pxt-tilemaps#v1.12.0"
+        "tilemaps": "github:microsoft/pxt-tilemaps#v1.12.0",
+        "browser-events": "*"
     },
     "files": [
         "main.ts",

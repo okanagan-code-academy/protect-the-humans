@@ -5,6 +5,7 @@ namespace SpriteKind {
     export const Shovel = SpriteKind.create()
     export const Human = SpriteKind.create()
     export const Scooper = SpriteKind.create()
+    export const Cursor = SpriteKind.create()
 }
 namespace userconfig {
     export const ARCADE_SCREEN_WIDTH = 160
@@ -84,11 +85,64 @@ namespace OverlapEvents {
         sprite.destroy()
         humansRescued += 1
     })
+    sprites.onOverlap(SpriteKind.Player, SpriteKind.Scooper, function(sprite: Sprite, otherSprite: Sprite){
+        if(humansRescued <= 0 ){
+            return
+        }
+        otherSprite.setFlag(SpriteFlag.Ghost, true)
+        let maxHumans: number = humansRescued
+        humansRescued = 0
+
+        for(let i = 0; i < maxHumans; i++){
+            let tempHuman: Sprite = sprites.create(SpriteSheet.human, SpriteKind.Food)
+            tempHuman.setPosition(otherSprite.x, otherSprite.y - 30)
+            tempHuman.ay = 300
+            tempHuman.lifespan = 500
+            pause(300)
+            animation.runImageAnimation(otherSprite, SpriteSheet.scooperSpriteAnimation, 50, false)
+            scene.cameraShake(8, 500)
+            for(let num = 0; num < randint(10, 15); num++){
+                let bitSprite: Sprite = sprites.create(SpriteSheet.humanBits._pickRandom(), SpriteKind.Food)
+                bitSprite.scale = randint(0.5, 1.5)
+                bitSprite.lifespan = randint(1000, 2000)
+                bitSprite.setPosition(otherSprite.x, otherSprite.y)
+                bitSprite.setVelocity(randint(-100, 100), randint(-100, 100))
+            }
+            pause(500)
+        }
+        otherSprite.setFlag(SpriteFlag.Ghost, false)
+    })
+
+    sprites.onOverlap(SpriteKind.Cursor, SpriteKind.Roomba, function(sprite: Sprite, otherSprite: Sprite){
+        if(currentControlledEntity){
+            return
+        }
+        if(browserEvents.MouseLeft.isPressed()){
+            info.startCountdown(10)
+            scene.cameraFollowSprite(otherSprite)
+            controller.moveSprite(playerSprite, 0, 0)
+            controller.moveSprite(otherSprite, 50, 50)
+            currentControlledEntity = otherSprite
+        }
+    })
+    sprites.onOverlap(SpriteKind.Cursor, SpriteKind.Excavator, function (sprite: Sprite, otherSprite: Sprite) {
+        if (currentControlledEntity) {
+            return
+        }
+        if (browserEvents.MouseLeft.isPressed()) {
+            info.startCountdown(10)
+            scene.cameraFollowSprite(otherSprite)
+            controller.moveSprite(playerSprite, 0, 0)
+            controller.moveSprite(otherSprite, 50, 50)
+            currentControlledEntity = otherSprite
+        }
+    })
 }
 
 
 
 let targetSprite: Sprite = null
+let cursorSprite: Sprite = null
 let playerSprite: Sprite = null
 let humansRescued: number = null
 let isDashing = false
@@ -394,7 +448,16 @@ function onStart() {
     generateTileMapEntity()
     generateTileMapHuman()
     createTargettingIndicatorSprite()
+    createCursorEntity()
+    
 }
+function createCursorEntity(){
+    cursorSprite = sprites.create(assets.image`cursor`, SpriteKind.Cursor)
+    game.onUpdate(function(){
+        cursorSprite.setPosition(browserEvents.mouseX() + scene.cameraProperty(CameraProperty.Left), browserEvents.mouseY() + scene.cameraProperty(CameraProperty.Top))
+    })
+}
+
 function generateTileMapHuman(){
     let humanAmount = randint(1, 5)
 
@@ -451,14 +514,24 @@ onStart()
 
 // Game-Updates
 game.onUpdate(function () {
-    let nearestEntity = spriteutils.getSpritesWithin(SpriteKind.Roomba, 40, playerSprite)
-        .concat(spriteutils.getSpritesWithin(SpriteKind.Excavator, 40, playerSprite))
+    // let nearestEntity = spriteutils.getSpritesWithin(SpriteKind.Roomba, 40, playerSprite)
+    //     .concat(spriteutils.getSpritesWithin(SpriteKind.Excavator, 40, playerSprite))
+    // targetSprite.setFlag(SpriteFlag.Invisible, true)
+    // if (nearestEntity.length > 0 && !(currentControlledEntity)) {
+    //     targetSprite.setFlag(SpriteFlag.Invisible, false)
+    //     targetSprite.setPosition(nearestEntity[0].x, nearestEntity[0].y - 10)
+    //     targetSprite.z = 100
+    // }
+    
     targetSprite.setFlag(SpriteFlag.Invisible, true)
-    if (nearestEntity.length > 0 && !(currentControlledEntity)) {
-        targetSprite.setFlag(SpriteFlag.Invisible, false)
-        targetSprite.setPosition(nearestEntity[0].x, nearestEntity[0].y - 10)
-        targetSprite.z = 100
+    for(let sprite of sprites.allOfKind(SpriteKind.Roomba).concat(sprites.allOfKind(SpriteKind.Excavator))){
+        if(cursorSprite.overlapsWith(sprite)){
+            targetSprite.setFlag(SpriteFlag.Invisible, false)
+            targetSprite.setPosition(sprite.x, sprite.y - 10)
+            targetSprite.z = 100
+        }
     }
+   
     for (let roomba of sprites.allOfKind(SpriteKind.Roomba)) {
         if (roomba.isHittingTile(CollisionDirection.Left)) {
             setRandomVelocity(roomba, 15, 1, randint(-1, 1))
