@@ -96,17 +96,22 @@ namespace OverlapEvents {
         for(let i = 0; i < maxHumans; i++){
             let tempHuman: Sprite = sprites.create(SpriteSheet.human, SpriteKind.Food)
             tempHuman.setPosition(otherSprite.x, otherSprite.y - 30)
+            tempHuman.scale =  1
             tempHuman.ay = 300
             tempHuman.lifespan = 500
-            pause(300)
+            forever(function () {
+                tempHuman.scale = tempHuman.scale - 1.25*control.eventContext().deltaTime
+            })
+            pause(400)
             animation.runImageAnimation(otherSprite, SpriteSheet.scooperSpriteAnimation, 50, false)
             scene.cameraShake(8, 500)
             for(let num = 0; num < randint(10, 15); num++){
                 let bitSprite: Sprite = sprites.create(SpriteSheet.humanBits._pickRandom(), SpriteKind.Food)
-                bitSprite.scale = randint(0.5, 1.5)
+                bitSprite.scale = randint(0.5, 0.75)
                 bitSprite.lifespan = randint(1000, 2000)
                 bitSprite.setPosition(otherSprite.x, otherSprite.y)
                 bitSprite.setVelocity(randint(-100, 100), randint(-100, 100))
+                
             }
             pause(500)
         }
