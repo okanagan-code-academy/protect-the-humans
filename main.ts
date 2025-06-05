@@ -464,7 +464,7 @@ function createCursorEntity(){
 }
 
 function generateTileMapHuman(){
-    let humanAmount = randint(1, 5)
+    let humanAmount = randint(10, 20)
 
     for(let i = 0; i <= humanAmount; i++){
         let humanSprite: Sprite = humanObject[0].createSprite()
